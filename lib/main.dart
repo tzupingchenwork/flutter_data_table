@@ -40,7 +40,10 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: Text(widget.title),
         ),
-        body: const DataTableExample());
+        body: const Card(
+          color: Color.fromARGB(255, 10, 139, 204),
+          child: DataTableExample(),
+        ));
   }
 }
 
