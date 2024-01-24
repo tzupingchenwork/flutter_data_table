@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'dart:convert';
 
 void main() {
   runApp(const MyApp());
@@ -39,49 +40,53 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: Text(widget.title),
         ),
-        body: const DataTableSimple());
+        body: const DataTableExample());
   }
 }
 
-class DataTableSimple extends StatelessWidget {
-  const DataTableSimple({super.key});
+const String _jsonResponse = '''
+[
+  {"columnA": "Row 1A", "columnB": "Row 1B", "columnC": "Row 1C"},
+  {"columnA": "Row 2A", "columnB": "Row 2B", "columnC": "Row 2C"},
+  {"columnA": "Row 3A", "columnB": "Row 3B", "columnC": "Row 3C"}
+]
+''';
+
+class DataTableExample extends StatelessWidget {
+  const DataTableExample({super.key});
 
   @override
   Widget build(BuildContext context) {
+    List<dynamic> jsonData = jsonDecode(_jsonResponse);
+
+    List<DataRow> rows = jsonData.map((jsonItem) {
+      return DataRow(cells: [
+        DataCell(Text(jsonItem['columnA'].toString())),
+        DataCell(Text(jsonItem['columnB'].toString())),
+        DataCell(Text(jsonItem['columnC'].toString())),
+      ]);
+    }).toList();
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: DataTable2(
-          columnSpacing: 12,
-          horizontalMargin: 12,
-          minWidth: 600,
-          columns: const [
-            DataColumn2(
-              label: Text('Column A'),
-              size: ColumnSize.L,
-            ),
-            DataColumn(
-              label: Text('Column B'),
-            ),
-            DataColumn(
-              label: Text('Column C'),
-            ),
-            DataColumn(
-              label: Text('Column D'),
-            ),
-            DataColumn(
-              label: Text('Column NUMBERS'),
-              numeric: true,
-            ),
-          ],
-          rows: List<DataRow>.generate(
-              50,
-              (index) => DataRow(cells: [
-                    DataCell(Text('A' * (10 - index % 10))),
-                    DataCell(Text('B' * (10 - (index + 5) % 10))),
-                    DataCell(Text('C' * (15 - (index + 5) % 10))),
-                    DataCell(Text('D' * (15 - (index + 10) % 10))),
-                    DataCell(Text(((index + 0.1) * 25.4).toString()))
-                  ]))),
+        columnSpacing: 12,
+        horizontalMargin: 12,
+        minWidth: 600,
+        columns: const [
+          DataColumn2(
+            label: Text('Column A'),
+            size: ColumnSize.L,
+          ),
+          DataColumn(
+            label: Text('Column B'),
+          ),
+          DataColumn(
+            label: Text('Column C'),
+          ),
+        ],
+        rows: rows,
+      ),
     );
   }
 }
