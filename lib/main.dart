@@ -9,7 +9,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,6 +18,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Flutter data table'),
+      routes: {
+        '/dataTable2': (context) => const DataTableExamplePage(),
+      },
     );
   }
 }
@@ -36,24 +38,41 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text(widget.title),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/dataTable2');
+          },
+          child: const Text('Go to Data Table 2 example'),
         ),
-        body: const Card(
-          color: Color.fromARGB(255, 10, 139, 204),
-          child: DataTableExample(),
-        ));
+      ),
+    );
   }
 }
 
-const String _jsonResponse = '''
-[
-  {"columnA": "Row 1A", "columnB": "Row 1B", "columnC": "Row 1C"},
-  {"columnA": "Row 2A", "columnB": "Row 2B", "columnC": "Row 2C"},
-  {"columnA": "Row 3A", "columnB": "Row 3B", "columnC": "Row 3C"}
-]
-''';
+class DataTableExamplePage extends StatelessWidget {
+  const DataTableExamplePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Data Table Example'),
+      ),
+      body: const Card(
+        color: Color.fromARGB(255, 10, 139, 204),
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: DataTableExample(),
+        ),
+      ),
+    );
+  }
+}
 
 class DataTableExample extends StatelessWidget {
   const DataTableExample({super.key});
@@ -70,26 +89,31 @@ class DataTableExample extends StatelessWidget {
       ]);
     }).toList();
 
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: DataTable2(
-        columnSpacing: 12,
-        horizontalMargin: 12,
-        minWidth: 600,
-        columns: const [
-          DataColumn2(
-            label: Text('Column A'),
-            size: ColumnSize.L,
-          ),
-          DataColumn(
-            label: Text('Column B'),
-          ),
-          DataColumn(
-            label: Text('Column C'),
-          ),
-        ],
-        rows: rows,
-      ),
+    return DataTable2(
+      columnSpacing: 12,
+      horizontalMargin: 12,
+      minWidth: 600,
+      columns: const [
+        DataColumn2(
+          label: Text('Column A'),
+          size: ColumnSize.L,
+        ),
+        DataColumn(
+          label: Text('Column B'),
+        ),
+        DataColumn(
+          label: Text('Column C'),
+        ),
+      ],
+      rows: rows,
     );
   }
 }
+
+const String _jsonResponse = '''
+[
+  {"columnA": "Row 1A", "columnB": "Row 1B", "columnC": "Row 1C"},
+  {"columnA": "Row 2A", "columnB": "Row 2B", "columnC": "Row 2C"},
+  {"columnA": "Row 3A", "columnB": "Row 3B", "columnC": "Row 3C"}
+]
+''';
